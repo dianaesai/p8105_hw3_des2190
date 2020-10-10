@@ -159,11 +159,12 @@ data("ny_noaa")
 Tidying data
 ```{r}
  ny_noaa %>%
-    separate(date, into = c("year", "month", "day"), convert = TRUE)
-
+  separate(date, into = c("year", "month", "day"), convert = TRUE) %>%
+  count(snow) %>% 
+	arrange(desc(n))
 ```
 
-
+The most commonly observed values for snowfall are "0 mm" with a count of 2008508 and "NA" with a count of 381221. They are followed by "25 mm" with a count of 31022 and "13 mm" with a count of 23095.
 
 ### Make a two-panel plot showing the average max temperature in January and in July in each station across years. Is there any observable / interpretable structure? Any outliers?
 
