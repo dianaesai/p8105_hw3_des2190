@@ -153,14 +153,16 @@ ggplot(aes(x = minute, y = activity_count, color = day_id), aplpha= 0.5) +
 
 Loading data
 ```{r}
-library(p8105.datasets)
 data("ny_noaa")
 ```
 
 Tidying data
 ```{r}
- 
+ ny_noaa %>%
+    separate(date, into = c("year", "month", "day"), convert = TRUE)
+
 ```
+
 
 
 ### Make a two-panel plot showing the average max temperature in January and in July in each station across years. Is there any observable / interpretable structure? Any outliers?
