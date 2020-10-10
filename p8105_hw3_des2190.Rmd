@@ -140,8 +140,8 @@ Accelerometer data allows the inspection activity over the course of the day. Ma
 
 ```{r}
 accel_df %>%
-ggplot(aes(x = minute, y = activity_count)) + 
-	geom_point() + 
+ggplot(aes(x = minute, y = activity_count, color = day_id), aplpha= 0.5) + 
+	geom_line() + 
 	theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
 
