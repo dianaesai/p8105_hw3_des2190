@@ -154,12 +154,13 @@ ggplot(aes(x = minute, y = activity_count, color = day_id), aplpha= 0.5) +
 Loading data
 ```{r}
 data("ny_noaa")
+ny_noaa = ny_noaa %>%
+  separate(date, into = c("year", "month", "day"), convert = TRUE)
 ```
 
 Tidying data
 ```{r}
- ny_noaa %>%
-  separate(date, into = c("year", "month", "day"), convert = TRUE) %>%
+ny_noaa_snow_count = ny_noaa %>%
   count(snow) %>% 
 	arrange(desc(n))
 ```
@@ -168,5 +169,26 @@ The most commonly observed values for snowfall are "0 mm" with a count of 200850
 
 ### Make a two-panel plot showing the average max temperature in January and in July in each station across years. Is there any observable / interpretable structure? Any outliers?
 
+```{r}
+ny_noaa_jan_jul_tmax_clean = ny_noaa %>%
+  filter(month == 1 | month == 7) %>%
+  filter(!is.na(tmax)) %>%
+  mutate(
+    tmax = as.numeric(tmax),
+    month = as.factor(month)
+  )
+
+tmax_ave_jan_jul = 
+  ny_noaa_jan_jul_tmax_clean %>%
+  group_by(month,year, id) %>%
+  summarise(avg_max = mean(tmax))
+
+tmax_ave_jan_jul %>% 
+  ggplot(aes(x = year, y = avg_max, color = id), alpha = 0.5) + 
+	geom_line() + 
+	theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+	facet_wrap(~month) +
+  viridis::scale_fill_viridis(discrete = TRUE)
+```
 
 ### Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option); and (ii) make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year.
